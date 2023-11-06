@@ -36,7 +36,7 @@ public class SecurityConfig {
         http.formLogin(
                 form -> form
                         .loginPage("/members/login")  // 기본 로그인 페이지 URL을 설정
-                        .defaultSuccessUrl("/")      // 로그인에 성공했을 때 URL
+                        .defaultSuccessUrl("/", true)      // 로그인에 성공했을 때 URL
                         .usernameParameter("email")  // 로그인에 사용할 매개변수 username -> email
                         .failureUrl("/members/login/error") // 실패했을 때 보낼 URL
         );
