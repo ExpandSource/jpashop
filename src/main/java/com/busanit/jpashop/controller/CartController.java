@@ -109,17 +109,13 @@ public class CartController {
         if (cartOrderDtoList == null || cartOrderDtoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("주문할 상품 선택해주세요.");
         }
-        // 유효성 검증 예외처리
-        if (!cartService.validateCartItem(cartOrderDto.getCartItemId(), principal.getName())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");
-        }
 
         // 서비스 계층 위임 : 장바구니주문상품목록, 로그인정보
         Long orderId = null;
         try {
             orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName());
         } catch (Exception e) {
-            new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.status(HttpStatus.OK).body(orderId);
     }

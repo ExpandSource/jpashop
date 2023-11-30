@@ -33,7 +33,6 @@ public class OrderController {
     @PostMapping(value = "/order")
     @ResponseBody
     public ResponseEntity order (@RequestBody @Valid OrderDto orderDto, Principal principal, BindingResult bindingResult) {
-
         if (bindingResult.hasErrors()) {
             // 예외처리 1 : 유효성 검증 통과하지 못할 경우
             StringBuilder stringBuilder = new StringBuilder();
