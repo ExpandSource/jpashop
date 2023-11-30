@@ -72,7 +72,7 @@ public class CartController {
     public ResponseEntity updateCartItem(@PathVariable("cartItemId") Long cartItemId, @RequestParam int count, Principal principal) {
 
         // 예외처리
-        if(count <= 0) {
+        if (count <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("최소 1개 이상 담아주세요.");
         } else if (!cartService.validateCartItem(cartItemId, principal.getName())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");
@@ -94,7 +94,7 @@ public class CartController {
         if (!cartService.validateCartItem(cartItemId, principal.getName())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");
         }
-        
+
         cartService.deleteCartItem(cartItemId);
         return ResponseEntity.status(HttpStatus.OK).body(cartItemId);
     }
@@ -106,16 +106,21 @@ public class CartController {
         List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
 
         // 예외처리
-        if(cartOrderDtoList == null || cartOrderDtoList.size() == 0) {
+        if (cartOrderDtoList == null || cartOrderDtoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("주문할 상품 선택해주세요.");
         }
         // 유효성 검증 예외처리
         if (!cartService.validateCartItem(cartOrderDto.getCartItemId(), principal.getName())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");
         }
-        
+
         // 서비스 계층 위임 : 장바구니주문상품목록, 로그인정보
-        Long orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName());
+        Long orderId = null;
+        try {
+            orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName());
+        } catch (Exception e) {
+            new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(orderId);
     }
 }

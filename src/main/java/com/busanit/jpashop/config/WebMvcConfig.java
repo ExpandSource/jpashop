@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    // 설정 정보에서 로컬 파일 위치 -> ㄴfile:///C:/shop/
+    // 설정 정보에서 로컬 파일 위치 -> file:///C:/shop/
     @Value("${uploadPath}")
     String uploadPath;
 
